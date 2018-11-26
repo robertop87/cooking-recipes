@@ -39,4 +39,11 @@ public class UserEntry {
         .birthDate(Dates.parseFrom(userEntry.birthInDdMmYy))
         .build();
   }
+
+  public static void updateFrom(User user, UserEntry userEntry) throws ParseException {
+    user.setEmail(userEntry.email);
+    user.setFullName(userEntry.fullName);
+    user.setBirthDate(Dates.parseFrom(userEntry.birthInDdMmYy));
+    user.setPassword(userEntry.password);
+  }
 }

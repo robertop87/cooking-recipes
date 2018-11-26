@@ -1,6 +1,7 @@
 package edu.cooking.recipes.application.users;
 
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
+import edu.cooking.recipes.commons.Credentials;
 import edu.cooking.recipes.domain.User;
 import edu.cooking.recipes.persistence.users.UserRepository;
 import java.text.ParseException;
@@ -54,11 +55,17 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User getPersonalData(String emailPassword) throws UserNotFoundException {
-    val splitData = emailPassword.split(":");
-    val email = splitData[0];
-    val password = splitData[1];
-
-    return this.repository.findByEmailAndPassword(email, password)
+    val credentials = Credentials.getCredentials(emailPassword);
+    return this.repository
+        .findByEmailAndPassword(credentials.get("email"), credentials.get("password"))
         .orElseThrow(UserNotFoundException::new);
+  }
+
+  @Override
+  public void updatePersonalData(String currentEmailPassword, UserEntry userEntry)
+      throws UserNotFoundException, ParseException {
+    User userToBeUpdated = this.getPersonalData(currentEmailPassword);
+    UserEntry.updateFrom(userToBeUpdated, userEntry);
+    this.repository.save(userToBeUpdated);
   }
 }
