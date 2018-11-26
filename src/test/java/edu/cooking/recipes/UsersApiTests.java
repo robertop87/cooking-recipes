@@ -1,7 +1,6 @@
 package edu.cooking.recipes;
 
-import edu.cooking.recipes.domain.User;
-import java.util.Date;
+import edu.cooking.recipes.application.users.UserEntry;
 import lombok.val;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,9 +23,9 @@ public class UsersApiTests {
 
   @Test
   public void testRegisterAnUserShouldReturnsCreatedStatus() throws Exception {
-    val user = User.builder()
+    val user = UserEntry.builder()
         .fullName("Test User")
-        .birthDate(new Date())
+        .birthInDdMmYy("17-09-2017")
         .email("test.user@email.com")
         .password("Password@123");
 
