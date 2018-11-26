@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -55,5 +56,15 @@ public class UserController {
       @NotBlank String emailPassword)
       throws UserNotFoundException {
     return ResponseEntity.ok(this.service.getPersonalData(emailPassword));
+  }
+
+  @PutMapping("/users/personal")
+  @ResponseBody
+  public ResponseEntity<User> updatePersonalUserData(
+      @RequestHeader("email-pwd")
+      @NotBlank String emailPassword, @RequestBody @Valid UserEntry userEntry)
+      throws UserNotFoundException {
+    this.service.updatePersonalData(emailPassword, userEntry);
+    return ResponseEntity.ok().build();
   }
 }

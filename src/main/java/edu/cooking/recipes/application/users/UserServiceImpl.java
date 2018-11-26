@@ -63,9 +63,15 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void updatePersonalData(String currentEmailPassword, UserEntry userEntry)
-      throws UserNotFoundException, ParseException {
-    User userToBeUpdated = this.getPersonalData(currentEmailPassword);
-    UserEntry.updateFrom(userToBeUpdated, userEntry);
-    this.repository.save(userToBeUpdated);
+      throws UserNotFoundException {
+    try {
+      User userToBeUpdated = this.getPersonalData(currentEmailPassword);
+      UserEntry.updateFrom(userToBeUpdated, userEntry);
+      this.repository.save(userToBeUpdated);
+    } catch (ParseException e) {
+      // TODO move this exception as Web Response
+      e.printStackTrace();
+      log.warning("Cannot parse the UserEntry");
+    }
   }
 }

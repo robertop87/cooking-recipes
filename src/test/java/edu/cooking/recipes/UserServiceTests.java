@@ -58,7 +58,7 @@ public class UserServiceTests {
     this.userService.registerUser(user2);
 
     val registeredUsers = this.userService.getAllUsers();
-    assertThat(registeredUsers, Matchers.hasSize(2));
+    assertThat(registeredUsers.size(), Matchers.greaterThan(1));
   }
 
   @Test
