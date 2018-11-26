@@ -2,6 +2,7 @@ package edu.cooking.recipes;
 
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import edu.cooking.recipes.application.users.UserEntry;
@@ -57,5 +58,30 @@ public class UserServiceTests {
 
     val registeredUsers = this.userService.getAllUsers();
     assertThat(registeredUsers, Matchers.hasSize(2));
+  }
+
+  @Test
+  public void testGetExistingUserById() {
+    val user = UserEntry.builder()
+        .fullName("Personal user")
+        .birthInDdMmYy("17-09-2017")
+        .email("personal.user@email.com")
+        .password("Password@123")
+        .build();
+
+    val resultId = this.userService.registerUser(user);
+
+    val targetUser = this.userService.getById(resultId);
+
+    assertThat(targetUser.isPresent(), is(Boolean.TRUE));
+    assertThat(targetUser.get().getFullName(), equalTo(user.getFullName()));
+    assertThat(targetUser.get().getEmail(), equalTo(user.getEmail()));
+  }
+
+  @Test
+  public void testSearchForNonExistingUserId() {
+    val targetUser = this.userService.getById(Long.MAX_VALUE);
+
+    assertThat(targetUser.isPresent(), is(Boolean.FALSE));
   }
 }
