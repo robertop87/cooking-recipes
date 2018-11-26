@@ -2,11 +2,11 @@ package edu.cooking.recipes;
 
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import edu.cooking.recipes.application.users.UserEntry;
 import edu.cooking.recipes.application.users.UserService;
+import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import lombok.val;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -61,7 +61,7 @@ public class UserServiceTests {
   }
 
   @Test
-  public void testGetExistingUserById() {
+  public void testGetExistingUserById() throws UserNotFoundException {
     val user = UserEntry.builder()
         .fullName("Personal user")
         .birthInDdMmYy("17-09-2017")
@@ -73,15 +73,12 @@ public class UserServiceTests {
 
     val targetUser = this.userService.getById(resultId);
 
-    assertThat(targetUser.isPresent(), is(Boolean.TRUE));
-    assertThat(targetUser.get().getFullName(), equalTo(user.getFullName()));
-    assertThat(targetUser.get().getEmail(), equalTo(user.getEmail()));
+    assertThat(targetUser.getFullName(), equalTo(user.getFullName()));
+    assertThat(targetUser.getEmail(), equalTo(user.getEmail()));
   }
 
-  @Test
-  public void testSearchForNonExistingUserId() {
-    val targetUser = this.userService.getById(Long.MAX_VALUE);
-
-    assertThat(targetUser.isPresent(), is(Boolean.FALSE));
+  @Test(expected = UserNotFoundException.class)
+  public void testSearchForNonExistingUserId() throws UserNotFoundException {
+    this.userService.getById(Long.MAX_VALUE);
   }
 }

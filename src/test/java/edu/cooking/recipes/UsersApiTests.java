@@ -116,10 +116,15 @@ public class UsersApiTests {
         .getResponse()
         .getHeader("Location");
 
-    System.out.println("##################################");
-    System.out.println(createUserLocation);
-
     this.mockMvc.perform(MockMvcRequestBuilders.get(createUserLocation))
       .andExpect(MockMvcResultMatchers.status().isOk());
+  }
+
+  @Test
+  public void testGetByUserNonExistingIdShouldReturnsNotFound() throws Exception {
+    val url = "http://localhost/users"+Long.MAX_VALUE;
+
+    this.mockMvc.perform(MockMvcRequestBuilders.get(url))
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 }
