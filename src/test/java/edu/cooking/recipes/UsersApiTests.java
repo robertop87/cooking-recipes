@@ -2,12 +2,14 @@ package edu.cooking.recipes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.cooking.recipes.application.users.UserEntry;
+import lombok.val;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,7 +28,7 @@ public class UsersApiTests {
 
   @Test
   public void testRegisterAnUserShouldReturnsCreatedStatus() throws Exception {
-    UserEntry user = UserEntry.builder()
+    val user = UserEntry.builder()
         .fullName("Test User")
         .birthInDdMmYy("17-09-2017")
         .email("test.user@email.com")
@@ -37,5 +39,65 @@ public class UsersApiTests {
         .contentType(MediaType.APPLICATION_JSON)
         .content(this.objectMapper.writeValueAsString(user)))
         .andExpect(MockMvcResultMatchers.status().isCreated());
+  }
+
+  @Test
+  public void testRegisterInvalidEmailDataShouldReturnBadRequest() throws Exception {
+    val user = UserEntry.builder()
+        .fullName("Test User")
+        .birthInDdMmYy("17-09-2017")
+        .email("it is not a email")
+        .password("Password@123")
+        .build();
+
+    this.mockMvc.perform(MockMvcRequestBuilders.post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(this.objectMapper.writeValueAsString(user)))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+  }
+
+  @Test
+  public void testRegisterEmptyNameShouldReturnBadRequest() throws Exception {
+    val user = UserEntry.builder()
+        .fullName("")
+        .birthInDdMmYy("17-09-2017")
+        .email("mail@mail.com")
+        .password("Password@123")
+        .build();
+
+    this.mockMvc.perform(MockMvcRequestBuilders.post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(this.objectMapper.writeValueAsString(user)))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+  }
+
+  @Test
+  public void testRegisterInvalidDateFormatShouldReturnBadRequest() throws Exception {
+    val user = UserEntry.builder()
+        .fullName("Test User")
+        .birthInDdMmYy("17/09/2017")
+        .email("an@email.com")
+        .password("Password@123")
+        .build();
+
+    this.mockMvc.perform(MockMvcRequestBuilders.post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(this.objectMapper.writeValueAsString(user)))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+  }
+
+  @Test
+  public void testRegisterEmptyPasswordShouldReturnBadRequest() throws Exception {
+    val user = UserEntry.builder()
+        .fullName("Test User")
+        .birthInDdMmYy("17-09-2017")
+        .email("an@email.com")
+        .password("")
+        .build();
+
+    this.mockMvc.perform(MockMvcRequestBuilders.post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(this.objectMapper.writeValueAsString(user)))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 }
