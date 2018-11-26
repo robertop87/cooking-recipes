@@ -4,6 +4,7 @@ import edu.cooking.recipes.domain.User;
 import edu.cooking.recipes.persistence.users.UserRepository;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -42,5 +43,10 @@ public class UserServiceImpl implements UserService {
         .stream(this.repository.findAll().spliterator(), false)
         .map(UserGet::mapFrom)
         .collect(Collectors.toSet());
+  }
+
+  @Override
+  public Optional<UserGet> getById(long userId) {
+    return this.repository.findById(userId).map(UserGet::mapFrom);
   }
 }
