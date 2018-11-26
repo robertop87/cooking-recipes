@@ -1,10 +1,10 @@
 package edu.cooking.recipes.application.users;
 
+import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import edu.cooking.recipes.domain.User;
 import edu.cooking.recipes.persistence.users.UserRepository;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -46,7 +46,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Optional<UserGet> getById(long userId) {
-    return this.repository.findById(userId).map(UserGet::mapFrom);
+  public UserGet getById(long userId) throws UserNotFoundException {
+    return this.repository.findById(userId)
+        .map(UserGet::mapFrom).orElseThrow(UserNotFoundException::new);
   }
 }

@@ -3,17 +3,19 @@ package edu.cooking.recipes.presentation;
 import edu.cooking.recipes.application.users.UserEntry;
 import edu.cooking.recipes.application.users.UserGet;
 import edu.cooking.recipes.application.users.UserService;
+import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
+import java.net.URI;
 import java.util.Set;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Controller
 public class UserController {
@@ -23,18 +25,23 @@ public class UserController {
 
   @PostMapping("/users")
   @ResponseBody
-  public ResponseEntity<Void> registerUser(UriComponentsBuilder uriComponentsBuilder,
-      @RequestBody @Valid UserEntry userEntry) {
+  public ResponseEntity<Void> registerUser(@RequestBody @Valid UserEntry userEntry) {
+    URI location = ServletUriComponentsBuilder
+        .fromCurrentRequest().path("/{id}")
+        .buildAndExpand(this.service.registerUser(userEntry)).toUri();
 
-    UriComponents uriComponents = uriComponentsBuilder.path("/users/{id}")
-        .buildAndExpand(this.service.registerUser(userEntry));
-
-    return ResponseEntity.created(uriComponents.toUri()).build();
+    return ResponseEntity.created(location).build();
   }
 
-  @GetMapping
+  @GetMapping("/users")
   @ResponseBody
   public Set<UserGet> getAllUsers() {
     return this.service.getAllUsers();
+  }
+
+  @GetMapping("/users/{id}")
+  @ResponseBody
+  public ResponseEntity<UserGet> getUserById(@PathVariable long id) throws UserNotFoundException {
+    return ResponseEntity.ok(this.service.getById(id));
   }
 }

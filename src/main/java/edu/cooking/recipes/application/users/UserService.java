@@ -1,6 +1,6 @@
 package edu.cooking.recipes.application.users;
 
-import java.util.Optional;
+import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import java.util.Set;
 
 public interface UserService {
@@ -9,5 +9,5 @@ public interface UserService {
 
   Set<UserGet> getAllUsers();
 
-  Optional<UserGet> getById(long userId);
+  UserGet getById(long userId) throws UserNotFoundException;
 }
