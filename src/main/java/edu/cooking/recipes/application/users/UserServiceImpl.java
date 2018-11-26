@@ -4,6 +4,9 @@ import edu.cooking.recipes.domain.User;
 import edu.cooking.recipes.persistence.users.UserRepository;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +34,13 @@ public class UserServiceImpl implements UserService {
       log.warning("Cannot parse the UserEntry");
     }
     return 0;
+  }
+
+  @Override
+  public Set<UserGet> getAllUsers() {
+    return StreamSupport
+        .stream(this.repository.findAll().spliterator(), false)
+        .map(UserGet::mapFrom)
+        .collect(Collectors.toSet());
   }
 }
