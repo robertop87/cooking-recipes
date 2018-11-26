@@ -99,4 +99,27 @@ public class UsersApiTests {
         .content(this.objectMapper.writeValueAsString(user)))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
+
+  @Test
+  public void testGetByUserShouldReturnsOk() throws Exception {
+    val user = UserEntry.builder()
+        .fullName("Test User")
+        .birthInDdMmYy("17-09-2017")
+        .email("test.user@email.com")
+        .password("Password@123")
+        .build();
+
+    val createUserLocation = this.mockMvc.perform(MockMvcRequestBuilders.post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(this.objectMapper.writeValueAsString(user)))
+        .andReturn()
+        .getResponse()
+        .getHeader("Location");
+
+    System.out.println("##################################");
+    System.out.println(createUserLocation);
+
+    this.mockMvc.perform(MockMvcRequestBuilders.get(createUserLocation))
+      .andExpect(MockMvcResultMatchers.status().isOk());
+  }
 }

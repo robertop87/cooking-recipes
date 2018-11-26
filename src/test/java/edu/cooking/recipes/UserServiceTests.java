@@ -34,7 +34,7 @@ public class UserServiceTests {
 
     val resultId = this.userService.registerUser(user);
 
-    assertThat(resultId, equalTo(1L));
+    assertThat(resultId, Matchers.greaterThan(0L));
   }
 
   @Test
