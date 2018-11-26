@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.extern.java.Log;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,5 +50,15 @@ public class UserServiceImpl implements UserService {
   public UserGet getById(long userId) throws UserNotFoundException {
     return this.repository.findById(userId)
         .map(UserGet::mapFrom).orElseThrow(UserNotFoundException::new);
+  }
+
+  @Override
+  public User getPersonalData(String emailPassword) throws UserNotFoundException {
+    val splitData = emailPassword.split(":");
+    val email = splitData[0];
+    val password = splitData[1];
+
+    return this.repository.findByEmailAndPassword(email, password)
+        .orElseThrow(UserNotFoundException::new);
   }
 }

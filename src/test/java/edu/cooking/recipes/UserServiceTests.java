@@ -81,4 +81,27 @@ public class UserServiceTests {
   public void testSearchForNonExistingUserId() throws UserNotFoundException {
     this.userService.getById(Long.MAX_VALUE);
   }
+
+  @Test
+  public void testGetPersonalData() throws UserNotFoundException {
+    val user = UserEntry.builder()
+        .fullName("Personal user")
+        .birthInDdMmYy("17-09-2017")
+        .email("private.data@email.com")
+        .password("private@data")
+        .build();
+
+    val resultId = this.userService.registerUser(user);
+
+    val privateUser = this.userService.getPersonalData("private.data@email.com:private@data");
+
+    assertThat(privateUser.getFullName(), equalTo(user.getFullName()));
+    assertThat(privateUser.getEmail(), equalTo(user.getEmail()));
+    assertThat(privateUser.getPassword(), equalTo(user.getPassword()));
+  }
+
+  @Test(expected = UserNotFoundException.class)
+  public void testSearchPersonalDataWithWrongCredentials() throws UserNotFoundException {
+    this.userService.getPersonalData("fake name:very wrong password");
+  }
 }

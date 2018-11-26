@@ -127,4 +127,32 @@ public class UsersApiTests {
     this.mockMvc.perform(MockMvcRequestBuilders.get(url))
         .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
+
+  @Test
+  public void testGetPersonalDataWithCredentialsReturnsOk() throws Exception {
+    val user = UserEntry.builder()
+        .fullName("Test User")
+        .birthInDdMmYy("17-09-2017")
+        .email("private.user@email.com")
+        .password("privatepassword")
+        .build();
+
+    val createUserLocation = this.mockMvc.perform(MockMvcRequestBuilders.post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(this.objectMapper.writeValueAsString(user)))
+        .andReturn()
+        .getResponse()
+        .getHeader("Location");
+
+    this.mockMvc.perform(MockMvcRequestBuilders.get("/users/personal")
+        .header("email-pwd", "private.user@email.com:privatepassword"))
+        .andExpect(MockMvcResultMatchers.status().isOk());
+  }
+
+  @Test
+  public void testGetPersonalDataWithWrongCredentialsReturnsNotFound() throws Exception {
+    this.mockMvc.perform(MockMvcRequestBuilders.get("/users/personal")
+        .header("email-pwd", "badEmail:badPassword"))
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
+  }
 }
