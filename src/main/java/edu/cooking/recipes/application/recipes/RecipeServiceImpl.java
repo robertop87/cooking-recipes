@@ -1,12 +1,10 @@
 package edu.cooking.recipes.application.recipes;
 
 import edu.cooking.recipes.application.recipes.exceptions.RecipeNotFoundException;
-import edu.cooking.recipes.application.users.UserGet;
 import edu.cooking.recipes.application.users.UserService;
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import edu.cooking.recipes.commons.Credentials;
 import edu.cooking.recipes.domain.Recipe;
-import edu.cooking.recipes.domain.User;
 import edu.cooking.recipes.persistence.recipes.RecipeRepository;
 import java.util.Date;
 import java.util.Set;

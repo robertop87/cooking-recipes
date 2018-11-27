@@ -3,7 +3,6 @@ package edu.cooking.recipes.persistence.recipes;
 import edu.cooking.recipes.domain.Recipe;
 import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;

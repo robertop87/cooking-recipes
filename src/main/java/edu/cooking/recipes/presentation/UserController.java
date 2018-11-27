@@ -8,7 +8,6 @@ import edu.cooking.recipes.application.users.exceptions.UserAlreadyRegisteredExc
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import edu.cooking.recipes.domain.User;
 import java.net.URI;
-import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
