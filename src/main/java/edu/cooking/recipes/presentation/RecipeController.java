@@ -2,6 +2,8 @@ package edu.cooking.recipes.presentation;
 
 import edu.cooking.recipes.application.recipes.RecipeEntry;
 import edu.cooking.recipes.application.recipes.RecipeService;
+import edu.cooking.recipes.application.recipes.RecipeToModify;
+import edu.cooking.recipes.application.recipes.exceptions.RecipeNotFoundException;
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import java.net.URI;
 import java.util.Set;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,5 +56,14 @@ public class RecipeController {
   @ResponseBody
   public Set<RecipeEntry> searchRecipes(@RequestParam("keyWord") @NotBlank String keyWord) {
     return this.recipeService.searchByWord(keyWord);
+  }
+
+  @PutMapping("/recipes/personal")
+  @ResponseBody
+  public void updateRecipe(
+      @RequestHeader("email-pwd") @NotBlank String emailPassword,
+      @RequestBody @Valid RecipeToModify recipeToModify)
+      throws UserNotFoundException, RecipeNotFoundException {
+    this.recipeService.update(emailPassword, recipeToModify);
   }
 }
