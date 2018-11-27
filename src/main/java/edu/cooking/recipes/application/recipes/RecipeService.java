@@ -10,4 +10,6 @@ public interface RecipeService {
   Set<RecipeEntry> getAllRecipes();
 
   Set<RecipeEntry> getAllByUserCredential(String emailPassword);
+
+  Set<RecipeEntry> searchByWord(String searchWord);
 }

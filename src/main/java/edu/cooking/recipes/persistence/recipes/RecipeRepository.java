@@ -13,4 +13,9 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long> {
       + "AND u.password = :userPassword")
   Set<Recipe> findRecipesByUserCredential(@Param("userEmail") String userEmail,
       @Param("userPassword") String userPassword);
+
+  @Query(value = "SELECT r FROM Recipe r JOIN FETCH r.user u "
+      + "WHERE (upper(r.name) LIKE %:searchWord%) "
+      + "OR (upper(r.content) LIKE %:searchWord%)")
+  Set<Recipe> searchWordInRecipe(@Param("searchWord") String searchWord);
 }

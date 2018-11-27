@@ -49,6 +49,11 @@ public class RecipeServiceImpl implements RecipeService {
         .findRecipesByUserCredential(credentials.get("email"), credentials.get("password")));
   }
 
+  @Override
+  public Set<RecipeEntry> searchByWord(String searchWord) {
+    return this.mapToSet(this.recipeRepository.searchWordInRecipe(searchWord.toUpperCase()));
+  }
+
   private Set<RecipeEntry> mapToSet(Iterable<Recipe> iterable) {
     return StreamSupport.stream(iterable.spliterator(), false)
         .map(RecipeEntry::mapFrom)
