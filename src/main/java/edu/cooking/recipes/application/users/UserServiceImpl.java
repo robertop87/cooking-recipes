@@ -1,5 +1,6 @@
 package edu.cooking.recipes.application.users;
 
+import edu.cooking.recipes.application.users.exceptions.BadDateFormatException;
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import edu.cooking.recipes.commons.Credentials;
 import edu.cooking.recipes.domain.User;
@@ -26,17 +27,15 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public long registerUser(UserEntry userEntry) {
+  public long registerUser(UserEntry userEntry) throws BadDateFormatException {
     try {
       User userToRegister = UserEntry.mapToDomain(userEntry);
       userToRegister.setRegisteredAt(new Date());
       return this.repository.save(userToRegister).getId();
     } catch (ParseException e) {
-      // TODO move this exception as Web Response
-      e.printStackTrace();
-      log.warning("Cannot parse the UserEntry");
+      log.info("Cannot parse the given date");
+      throw new BadDateFormatException();
     }
-    return 0;
   }
 
   @Override
@@ -63,15 +62,14 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void updatePersonalData(String currentEmailPassword, UserEntry userEntry)
-      throws UserNotFoundException {
+      throws UserNotFoundException, BadDateFormatException {
     try {
       User userToBeUpdated = this.getPersonalData(currentEmailPassword);
       UserEntry.updateFrom(userToBeUpdated, userEntry);
       this.repository.save(userToBeUpdated);
     } catch (ParseException e) {
-      // TODO move this exception as Web Response
-      e.printStackTrace();
-      log.warning("Cannot parse the UserEntry");
+      log.info("Cannot parse the given date");
+      throw new BadDateFormatException();
     }
   }
 }

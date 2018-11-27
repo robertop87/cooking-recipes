@@ -1,12 +1,13 @@
 package edu.cooking.recipes.application.users;
 
+import edu.cooking.recipes.application.users.exceptions.BadDateFormatException;
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import edu.cooking.recipes.domain.User;
 import java.util.Set;
 
 public interface UserService {
 
-  long registerUser(UserEntry userEntry);
+  long registerUser(UserEntry userEntry) throws BadDateFormatException;
 
   Set<UserGet> getAllUsers();
 
@@ -15,5 +16,5 @@ public interface UserService {
   User getPersonalData(String emailPassword) throws UserNotFoundException;
 
   void updatePersonalData(String currentEmailPassword, UserEntry userEntry)
-      throws UserNotFoundException;
+      throws UserNotFoundException, BadDateFormatException;
 }
