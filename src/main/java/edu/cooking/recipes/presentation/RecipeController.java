@@ -40,4 +40,11 @@ public class RecipeController {
   public Set<RecipeEntry> getAllRecipes() {
     return this.recipeService.getAllRecipes();
   }
+
+  @GetMapping("/recipes/personal")
+  @ResponseBody
+  public Set<RecipeEntry> getAllRecipes(
+      @RequestHeader("email-pwd") @NotBlank String emailPassword) {
+    return this.recipeService.getAllByUserCredential(emailPassword);
+  }
 }
