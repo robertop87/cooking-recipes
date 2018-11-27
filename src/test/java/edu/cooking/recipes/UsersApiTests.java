@@ -103,9 +103,9 @@ public class UsersApiTests {
   @Test
   public void testGetByUserShouldReturnsOk() throws Exception {
     val user = UserEntry.builder()
-        .fullName("Test User")
+        .fullName("Test User with special email")
         .birthInDdMmYy("17-09-2017")
-        .email("test.user@email.com")
+        .email("special.user@email.com")
         .password("Password@123")
         .build();
 

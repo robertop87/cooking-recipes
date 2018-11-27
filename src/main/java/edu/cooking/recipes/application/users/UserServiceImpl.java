@@ -1,6 +1,7 @@
 package edu.cooking.recipes.application.users;
 
 import edu.cooking.recipes.application.users.exceptions.BadDateFormatException;
+import edu.cooking.recipes.application.users.exceptions.UserAlreadyRegisteredException;
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import edu.cooking.recipes.commons.Credentials;
 import edu.cooking.recipes.domain.User;
@@ -27,7 +28,11 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public long registerUser(UserEntry userEntry) throws BadDateFormatException {
+  public long registerUser(UserEntry userEntry)
+      throws BadDateFormatException, UserAlreadyRegisteredException {
+    if (this.repository.findByEmail(userEntry.getEmail()).isPresent()) {
+      throw new UserAlreadyRegisteredException();
+    }
     try {
       User userToRegister = UserEntry.mapToDomain(userEntry);
       userToRegister.setRegisteredAt(new Date());

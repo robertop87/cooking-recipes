@@ -3,10 +3,8 @@ package edu.cooking.recipes;
 import edu.cooking.recipes.application.recipes.RecipeEntry;
 import edu.cooking.recipes.application.recipes.RecipeService;
 import edu.cooking.recipes.application.recipes.RecipeToModify;
-import edu.cooking.recipes.application.recipes.exceptions.RecipeNotFoundException;
 import edu.cooking.recipes.application.users.UserEntry;
 import edu.cooking.recipes.application.users.UserService;
-import edu.cooking.recipes.application.users.exceptions.BadDateFormatException;
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import lombok.val;
 import org.hamcrest.MatcherAssert;
@@ -30,7 +28,7 @@ public class RecipeServiceTest {
   private UserService userService;
 
   @Test
-  public void testRegisterNewRecipe() throws UserNotFoundException, BadDateFormatException {
+  public void testRegisterNewRecipe() throws Exception {
     // 1. First step, a User must be registered first
     val owner = UserEntry.builder()
         .fullName("Owner of recipe")
@@ -62,8 +60,7 @@ public class RecipeServiceTest {
   }
 
   @Test
-  public void testGetAllRecipeForUserCredentials()
-      throws UserNotFoundException, BadDateFormatException {
+  public void testGetAllRecipeForUserCredentials() throws Exception {
     // 1. First step, a User must be registered first
     val owner = UserEntry.builder()
         .fullName("Owner of 2 recipes")
@@ -94,7 +91,7 @@ public class RecipeServiceTest {
   }
 
   @Test
-  public void testSearchRecipes() throws UserNotFoundException, BadDateFormatException {
+  public void testSearchRecipes() throws Exception {
     // 1. First step, a User must be registered first
     val owner = UserEntry.builder()
         .fullName("Owner of searchable recipes")
@@ -140,8 +137,7 @@ public class RecipeServiceTest {
   }
 
   @Test
-  public void testUpdateRecipe()
-      throws UserNotFoundException, RecipeNotFoundException, BadDateFormatException {
+  public void testUpdateRecipe() throws Exception {
     // 1. First step, a User must be registered first
     val owner = UserEntry.builder()
         .fullName("Owner of the updatable recipe")
@@ -173,8 +169,7 @@ public class RecipeServiceTest {
   }
 
   @Test
-  public void testDeleteRecipe()
-      throws UserNotFoundException, RecipeNotFoundException, BadDateFormatException {
+  public void testDeleteRecipe() throws Exception {
     // 1. First step, a User must be registered first
     val owner = UserEntry.builder()
         .fullName("Owner of the future delete recipe")

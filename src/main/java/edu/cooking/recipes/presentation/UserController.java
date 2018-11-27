@@ -4,6 +4,7 @@ import edu.cooking.recipes.application.users.UserEntry;
 import edu.cooking.recipes.application.users.UserGet;
 import edu.cooking.recipes.application.users.UserService;
 import edu.cooking.recipes.application.users.exceptions.BadDateFormatException;
+import edu.cooking.recipes.application.users.exceptions.UserAlreadyRegisteredException;
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import edu.cooking.recipes.domain.User;
 import java.net.URI;
@@ -31,7 +32,7 @@ public class UserController {
   @PostMapping("/users")
   @ResponseBody
   public ResponseEntity<Void> registerUser(@RequestBody @Valid UserEntry userEntry)
-      throws BadDateFormatException {
+      throws BadDateFormatException, UserAlreadyRegisteredException {
     URI location = ServletUriComponentsBuilder
         .fromCurrentRequest().path("/{id}")
         .buildAndExpand(this.service.registerUser(userEntry)).toUri();

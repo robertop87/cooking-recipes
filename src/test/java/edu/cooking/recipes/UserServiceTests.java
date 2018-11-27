@@ -8,7 +8,6 @@ import edu.cooking.recipes.application.users.UserEntry;
 import edu.cooking.recipes.application.users.UserService;
 import edu.cooking.recipes.application.users.exceptions.BadDateFormatException;
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
-import java.text.ParseException;
 import lombok.val;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -26,7 +25,7 @@ public class UserServiceTests {
   private UserService userService;
 
   @Test
-  public void testRegisterUser() throws BadDateFormatException {
+  public void testRegisterUser() throws Exception {
     val user = UserEntry.builder()
         .fullName("Test User")
         .birthInDdMmYy("17-09-2017")
@@ -40,7 +39,7 @@ public class UserServiceTests {
   }
 
   @Test(expected = BadDateFormatException.class)
-  public void testRegisterUserBadDateFormat() throws BadDateFormatException {
+  public void testRegisterUserBadDateFormat() throws Exception {
     val user = UserEntry.builder()
         .fullName("Test User")
         .birthInDdMmYy("17-09/2017") // Wrong date format intentionally
@@ -51,7 +50,7 @@ public class UserServiceTests {
   }
 
   @Test
-  public void testGetAllUsers() throws BadDateFormatException {
+  public void testGetAllUsers() throws Exception {
     val user1 = UserEntry.builder()
         .fullName("Tester One")
         .birthInDdMmYy("01-01-1111")
@@ -74,7 +73,7 @@ public class UserServiceTests {
   }
 
   @Test
-  public void testGetExistingUserById() throws UserNotFoundException, BadDateFormatException {
+  public void testGetExistingUserById() throws Exception {
     val user = UserEntry.builder()
         .fullName("Personal user")
         .birthInDdMmYy("17-09-2017")
@@ -91,12 +90,12 @@ public class UserServiceTests {
   }
 
   @Test(expected = UserNotFoundException.class)
-  public void testSearchForNonExistingUserId() throws UserNotFoundException {
+  public void testSearchForNonExistingUserId() throws Exception {
     this.userService.getById(Long.MAX_VALUE);
   }
 
   @Test
-  public void testGetPersonalData() throws UserNotFoundException, BadDateFormatException {
+  public void testGetPersonalData() throws Exception {
     val user = UserEntry.builder()
         .fullName("Personal user")
         .birthInDdMmYy("17-09-2017")
@@ -119,8 +118,7 @@ public class UserServiceTests {
   }
 
   @Test
-  public void testUpdateExistingUser()
-      throws UserNotFoundException, BadDateFormatException {
+  public void testUpdateExistingUser() throws Exception {
     val user = UserEntry.builder()
         .fullName("To be updated")
         .birthInDdMmYy("17-09-2017")
