@@ -8,4 +8,6 @@ public interface RecipeService {
   long registerRecipe(String emailPassword, RecipeEntry recipeEntry) throws UserNotFoundException;
 
   Set<RecipeEntry> getAllRecipes();
+
+  Set<RecipeEntry> getAllByUserCredential(String emailPassword);
 }

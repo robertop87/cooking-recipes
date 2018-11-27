@@ -2,6 +2,7 @@ package edu.cooking.recipes.application.recipes;
 
 import edu.cooking.recipes.application.users.UserService;
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
+import edu.cooking.recipes.commons.Credentials;
 import edu.cooking.recipes.domain.Recipe;
 import edu.cooking.recipes.persistence.recipes.RecipeRepository;
 import java.util.Date;
@@ -38,7 +39,18 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public Set<RecipeEntry> getAllRecipes() {
-    return StreamSupport.stream(this.recipeRepository.findAll().spliterator(), false)
+    return this.mapToSet(this.recipeRepository.findAll());
+  }
+
+  @Override
+  public Set<RecipeEntry> getAllByUserCredential(String emailPassword) {
+    val credentials = Credentials.getCredentials(emailPassword);
+    return this.mapToSet(this.recipeRepository
+        .findRecipesByUserCredential(credentials.get("email"), credentials.get("password")));
+  }
+
+  private Set<RecipeEntry> mapToSet(Iterable<Recipe> iterable) {
+    return StreamSupport.stream(iterable.spliterator(), false)
         .map(RecipeEntry::mapFrom)
         .collect(Collectors.toSet());
   }
