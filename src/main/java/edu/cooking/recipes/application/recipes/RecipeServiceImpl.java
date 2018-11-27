@@ -73,8 +73,14 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  public void deleted(String emailPassword, RecipeToModify recipeToModify)
-      throws UserNotFoundException {}
+  public void deleteByName(String emailPassword, String recipeName)
+      throws UserNotFoundException, RecipeNotFoundException {
+    val owner = this.userService.getPersonalData(emailPassword);
+    Recipe recipeToDelete = this.recipeRepository.getRecipeByNameAndUserEmail(recipeName, owner.getEmail())
+        .stream().findFirst().orElseThrow(RecipeNotFoundException::new);
+
+    this.recipeRepository.deleteRecipeById(recipeToDelete.getId());
+  }
 
   private Set<RecipeEntry> mapToSet(Iterable<Recipe> iterable) {
     return StreamSupport.stream(iterable.spliterator(), false)

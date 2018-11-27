@@ -5,6 +5,7 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface RecipeRepository extends CrudRepository<Recipe, Long> {
 
@@ -24,4 +25,7 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long> {
       + "AND upper(r.name) = upper(:recipeName)")
   Set<Recipe> getRecipeByNameAndUserEmail(@Param("recipeName") String recipeName,
       @Param("userEmail") String userEmail);
+
+  @Transactional
+  void deleteRecipeById(long recipeId);
 }

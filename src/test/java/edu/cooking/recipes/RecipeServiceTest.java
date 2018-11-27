@@ -168,4 +168,32 @@ public class RecipeServiceTest {
     val updated = this.recipeService.searchByWord("My updated name");
     Assert.assertThat(updated, Matchers.hasSize(1));
   }
+
+  @Test
+  public void testDeleteRecipe() throws UserNotFoundException, RecipeNotFoundException {
+    // 1. First step, a User must be registered first
+    val owner = UserEntry.builder()
+        .fullName("Owner of the future delete recipe")
+        .birthInDdMmYy("01-01-2019")
+        .email("recipe.delete.owner@email.com")
+        .password("Password123")
+        .build();
+
+    val ownerCredentials = String.join(":", owner.getEmail(), owner.getPassword());
+    this.userService.registerUser(owner);
+
+    // 2. Second step create a Recipe, using Owner credentials email:password
+    val recipe = RecipeEntry.builder()
+        .name("To be deleted")
+        .content("Cut the fruits, mix them and add sugar")
+        .build();
+    this.recipeService.register(ownerCredentials, recipe);
+
+    // 3. Delete the latest created recipe
+    this.recipeService.deleteByName(ownerCredentials, recipe.getName());
+
+    // 4. Search by new name and compare values
+    val updated = this.recipeService.searchByWord(recipe.getName());
+    Assert.assertThat(updated, Matchers.empty());
+  }
 }

@@ -17,5 +17,6 @@ public interface RecipeService {
   void update(String emailPassword, RecipeToModify recipeToModify)
       throws UserNotFoundException, RecipeNotFoundException;
 
-  void deleted(String emailPassword, RecipeToModify recipeToModify) throws UserNotFoundException;
+  void deleteByName(String emailPassword, String recipeName)
+      throws UserNotFoundException, RecipeNotFoundException;
 }
