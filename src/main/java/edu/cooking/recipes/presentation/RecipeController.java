@@ -12,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -65,5 +66,14 @@ public class RecipeController {
       @RequestBody @Valid RecipeToModify recipeToModify)
       throws UserNotFoundException, RecipeNotFoundException {
     this.recipeService.update(emailPassword, recipeToModify);
+  }
+
+  @DeleteMapping("/recipes/personal")
+  @ResponseBody
+  public void deleteRecipe(
+      @RequestHeader("email-pwd") @NotBlank String emailPassword,
+      @RequestParam("recipeNameToDelete") @NotBlank String recipeNameToDelete)
+      throws UserNotFoundException, RecipeNotFoundException {
+    this.recipeService.deleteByName(emailPassword, recipeNameToDelete);
   }
 }
