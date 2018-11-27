@@ -1,10 +1,12 @@
 package edu.cooking.recipes.application.recipes;
 
 import edu.cooking.recipes.application.recipes.exceptions.RecipeNotFoundException;
+import edu.cooking.recipes.application.users.UserGet;
 import edu.cooking.recipes.application.users.UserService;
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import edu.cooking.recipes.commons.Credentials;
 import edu.cooking.recipes.domain.Recipe;
+import edu.cooking.recipes.domain.User;
 import edu.cooking.recipes.persistence.recipes.RecipeRepository;
 import java.util.Date;
 import java.util.Set;
@@ -12,6 +14,8 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,6 +44,12 @@ public class RecipeServiceImpl implements RecipeService {
   @Override
   public Set<RecipeEntry> getAll() {
     return this.mapToSet(this.recipeRepository.findAll());
+  }
+
+  @Override
+  public Page<RecipeEntry> getAllByPage(Pageable pageable) {
+    Page<Recipe> recipePage = this.recipeRepository.findAll(pageable);
+    return recipePage.map(RecipeEntry::mapFrom);
   }
 
   @Override

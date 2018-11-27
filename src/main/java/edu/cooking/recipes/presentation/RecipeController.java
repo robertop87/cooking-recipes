@@ -10,6 +10,8 @@ import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,8 +44,8 @@ public class RecipeController {
 
   @GetMapping("/recipes")
   @ResponseBody
-  public Set<RecipeEntry> getAllRecipes() {
-    return this.recipeService.getAll();
+  public Page<RecipeEntry> getAllRecipes(Pageable pageable) {
+    return this.recipeService.getAllByPage(pageable);
   }
 
   @GetMapping("/recipes/personal")
