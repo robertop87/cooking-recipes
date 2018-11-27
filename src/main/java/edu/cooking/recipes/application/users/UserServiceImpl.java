@@ -67,7 +67,12 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void updatePersonalData(String currentEmailPassword, UserEntry userEntry)
-      throws UserNotFoundException, BadDateFormatException {
+      throws UserNotFoundException, BadDateFormatException, UserAlreadyRegisteredException {
+    if (!currentEmailPassword.equalsIgnoreCase(userEntry.getEmail())) {
+      if (this.repository.findByEmail(userEntry.getEmail()).isPresent()) {
+        throw new UserAlreadyRegisteredException();
+      }
+    }
     try {
       User userToBeUpdated = this.getPersonalData(currentEmailPassword);
       UserEntry.updateFrom(userToBeUpdated, userEntry);

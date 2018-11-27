@@ -18,5 +18,5 @@ public interface UserService {
   User getPersonalData(String emailPassword) throws UserNotFoundException;
 
   void updatePersonalData(String currentEmailPassword, UserEntry userEntry)
-      throws UserNotFoundException, BadDateFormatException;
+      throws UserNotFoundException, BadDateFormatException, UserAlreadyRegisteredException;
 }

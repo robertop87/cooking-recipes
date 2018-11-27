@@ -66,7 +66,7 @@ public class UserController {
   public ResponseEntity<User> updatePersonalUserData(
       @RequestHeader("email-pwd")
       @NotBlank String emailPassword, @RequestBody @Valid UserEntry userEntry)
-      throws UserNotFoundException, BadDateFormatException {
+      throws UserNotFoundException, BadDateFormatException, UserAlreadyRegisteredException {
     this.service.updatePersonalData(emailPassword, userEntry);
     return ResponseEntity.ok().build();
   }

@@ -7,6 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import edu.cooking.recipes.application.users.UserEntry;
 import edu.cooking.recipes.application.users.UserService;
 import edu.cooking.recipes.application.users.exceptions.BadDateFormatException;
+import edu.cooking.recipes.application.users.exceptions.UserAlreadyRegisteredException;
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import lombok.val;
 import org.hamcrest.Matchers;
@@ -144,5 +145,57 @@ public class UserServiceTests {
 
     assertThat(updatedUser.getEmail(), equalTo(newUserData.getEmail()));
     assertThat(updatedUser.getFullName(), equalTo(newUserData.getFullName()));
+  }
+
+  @Test(expected = UserAlreadyRegisteredException.class)
+  public void testRegisterUserWithDuplicatedEmail() throws Exception {
+    val user = UserEntry.builder()
+        .fullName("Test User")
+        .birthInDdMmYy("17-09-2017")
+        .email("user.duplicated@email.com")
+        .password("Password@123")
+        .build();
+    this.userService.registerUser(user);
+
+    val userDuplicatedEmail = UserEntry.builder()
+        .fullName("Test User with duplicated email")
+        .birthInDdMmYy("17-09-2017")
+        .email("user.duplicated@email.com")
+        .password("Password@123")
+        .build();
+
+    this.userService.registerUser(userDuplicatedEmail);
+  }
+
+  @Test(expected = UserAlreadyRegisteredException.class)
+  public void testUpdateUserWithDuplicatedEmail() throws Exception {
+
+    val user = UserEntry.builder()
+        .fullName("To be updated")
+        .birthInDdMmYy("17-09-2017")
+        .email("to.be.updated.d@email.com")
+        .password("updatable")
+        .build();
+
+    val user2 = UserEntry.builder()
+        .fullName("I have my own mail")
+        .birthInDdMmYy("17-09-2017")
+        .email("my.own@email.com")
+        .password("updatable")
+        .build();
+
+    // 1. Step register the users
+    this.userService.registerUser(user);
+    this.userService.registerUser(user2);
+
+    // 2. Step update user data using credentials and already registered email
+    val newUserData = UserEntry.builder()
+        .fullName("I'm updated")
+        .birthInDdMmYy("5-5-2005")
+        .email("my.own@email.com") // Already existing email
+        .password("strongPassword")
+        .build();
+
+    this.userService.updatePersonalData("to.be.updated.d@email.com:updatable", newUserData);
   }
 }
