@@ -18,4 +18,10 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long> {
       + "WHERE (upper(r.name) LIKE %:searchWord%) "
       + "OR (upper(r.content) LIKE %:searchWord%)")
   Set<Recipe> searchWordInRecipe(@Param("searchWord") String searchWord);
+
+  @Query(value = "SELECT r FROM Recipe r JOIN FETCH r.user u "
+      + "WHERE u.email = :userEmail "
+      + "AND upper(r.name) = upper(:recipeName)")
+  Set<Recipe> getRecipeByNameAndUserEmail(@Param("recipeName") String recipeName,
+      @Param("userEmail") String userEmail);
 }

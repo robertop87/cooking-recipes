@@ -31,7 +31,7 @@ public class RecipeController {
       @RequestBody @Valid RecipeEntry recipeEntry) throws UserNotFoundException {
     URI location = ServletUriComponentsBuilder
         .fromCurrentRequest().path("/{id}")
-        .buildAndExpand(this.recipeService.registerRecipe(emailPassword, recipeEntry)).toUri();
+        .buildAndExpand(this.recipeService.register(emailPassword, recipeEntry)).toUri();
 
     return ResponseEntity.created(location).build();
   }
@@ -39,7 +39,7 @@ public class RecipeController {
   @GetMapping("/recipes")
   @ResponseBody
   public Set<RecipeEntry> getAllRecipes() {
-    return this.recipeService.getAllRecipes();
+    return this.recipeService.getAll();
   }
 
   @GetMapping("/recipes/personal")

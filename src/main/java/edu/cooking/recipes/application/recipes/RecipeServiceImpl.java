@@ -1,5 +1,6 @@
 package edu.cooking.recipes.application.recipes;
 
+import edu.cooking.recipes.application.recipes.exceptions.RecipeNotFoundException;
 import edu.cooking.recipes.application.users.UserService;
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import edu.cooking.recipes.commons.Credentials;
@@ -26,8 +27,7 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  public long registerRecipe(String emailPassword, RecipeEntry recipeEntry)
-      throws UserNotFoundException {
+  public long register(String emailPassword, RecipeEntry recipeEntry) throws UserNotFoundException {
     val recipeOwner = this.userService.getPersonalData(emailPassword);
 
     Recipe recipe = RecipeEntry.mapTo(recipeEntry);
@@ -38,21 +38,43 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  public Set<RecipeEntry> getAllRecipes() {
+  public Set<RecipeEntry> getAll() {
     return this.mapToSet(this.recipeRepository.findAll());
   }
 
   @Override
   public Set<RecipeEntry> getAllByUserCredential(String emailPassword) {
     val credentials = Credentials.getCredentials(emailPassword);
-    return this.mapToSet(this.recipeRepository
-        .findRecipesByUserCredential(credentials.get("email"), credentials.get("password")));
+    return this.mapToSet(
+        this.recipeRepository.findRecipesByUserCredential(
+            credentials.get("email"), credentials.get("password")));
   }
 
   @Override
   public Set<RecipeEntry> searchByWord(String searchWord) {
     return this.mapToSet(this.recipeRepository.searchWordInRecipe(searchWord.toUpperCase()));
   }
+
+  @Override
+  public void update(String emailPassword, RecipeToModify recipeToModify)
+      throws UserNotFoundException, RecipeNotFoundException {
+    val owner = this.userService.getPersonalData(emailPassword);
+
+    val results =
+        this.recipeRepository.getRecipeByNameAndUserEmail(
+            recipeToModify.getOriginalName(), owner.getEmail());
+
+    Recipe recipeToUpdate = results.stream().findFirst().orElseThrow(RecipeNotFoundException::new);
+
+    recipeToUpdate.setName(recipeToModify.getRecipeEntry().getName());
+    recipeToUpdate.setContent(recipeToModify.getRecipeEntry().getContent());
+
+    this.recipeRepository.save(recipeToUpdate);
+  }
+
+  @Override
+  public void deleted(String emailPassword, RecipeToModify recipeToModify)
+      throws UserNotFoundException {}
 
   private Set<RecipeEntry> mapToSet(Iterable<Recipe> iterable) {
     return StreamSupport.stream(iterable.spliterator(), false)
