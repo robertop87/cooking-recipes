@@ -4,11 +4,13 @@ import edu.cooking.recipes.application.recipes.RecipeEntry;
 import edu.cooking.recipes.application.recipes.RecipeService;
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import java.net.URI;
+import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -31,5 +33,11 @@ public class RecipeController {
         .buildAndExpand(this.recipeService.registerRecipe(emailPassword, recipeEntry)).toUri();
 
     return ResponseEntity.created(location).build();
+  }
+
+  @GetMapping("/recipes")
+  @ResponseBody
+  public Set<RecipeEntry> getAllRecipes() {
+    return this.recipeService.getAllRecipes();
   }
 }

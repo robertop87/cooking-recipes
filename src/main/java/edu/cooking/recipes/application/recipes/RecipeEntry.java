@@ -30,4 +30,16 @@ public class RecipeEntry {
         .content(recipeEntry.content)
         .build();
   }
+
+  /**
+   * Map a {@link RecipeEntry} from {@link Recipe}.
+   * @param recipe {@link Recipe}
+   * @return a {@link RecipeEntry}
+   */
+  public static RecipeEntry mapFrom(Recipe recipe) {
+    return RecipeEntry.builder()
+        .name(recipe.getName())
+        .content(recipe.getContent())
+        .build();
+  }
 }

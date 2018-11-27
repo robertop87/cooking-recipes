@@ -5,6 +5,9 @@ import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import edu.cooking.recipes.domain.Recipe;
 import edu.cooking.recipes.persistence.recipes.RecipeRepository;
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +34,12 @@ public class RecipeServiceImpl implements RecipeService {
     recipe.setCreatedAt(new Date());
 
     return this.recipeRepository.save(recipe).getId();
+  }
+
+  @Override
+  public Set<RecipeEntry> getAllRecipes() {
+    return StreamSupport.stream(this.recipeRepository.findAll().spliterator(), false)
+        .map(RecipeEntry::mapFrom)
+        .collect(Collectors.toSet());
   }
 }
