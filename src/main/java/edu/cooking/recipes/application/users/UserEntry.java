@@ -33,17 +33,17 @@ public class UserEntry {
 
   public static User mapToDomain(UserEntry userEntry) throws ParseException {
     return User.builder()
-        .fullName(userEntry.fullName)
-        .email(userEntry.email)
-        .password(userEntry.password)
-        .birthDate(Dates.parseFrom(userEntry.birthInDdMmYy))
+        .fullName(userEntry.fullName.trim())
+        .email(userEntry.email.trim())
+        .password(userEntry.password.trim())
+        .birthDate(Dates.parseFrom(userEntry.birthInDdMmYy.trim()))
         .build();
   }
 
   public static void updateFrom(User user, UserEntry userEntry) throws ParseException {
-    user.setEmail(userEntry.email);
-    user.setFullName(userEntry.fullName);
-    user.setBirthDate(Dates.parseFrom(userEntry.birthInDdMmYy));
-    user.setPassword(userEntry.password);
+    user.setEmail(userEntry.email.trim());
+    user.setFullName(userEntry.fullName.trim());
+    user.setBirthDate(Dates.parseFrom(userEntry.birthInDdMmYy.trim()));
+    user.setPassword(userEntry.password.trim());
   }
 }

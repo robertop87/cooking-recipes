@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public long registerUser(UserEntry userEntry)
       throws BadDateFormatException, UserAlreadyRegisteredException {
-    if (this.repository.findByEmail(userEntry.getEmail()).isPresent()) {
+    if (this.repository.findByEmail(userEntry.getEmail().trim()).isPresent()) {
       throw new UserAlreadyRegisteredException();
     }
     try {
@@ -68,7 +68,10 @@ public class UserServiceImpl implements UserService {
   @Override
   public void updatePersonalData(String currentEmailPassword, UserEntry userEntry)
       throws UserNotFoundException, BadDateFormatException, UserAlreadyRegisteredException {
-    if (!currentEmailPassword.equalsIgnoreCase(userEntry.getEmail())) {
+    val currentEmail = Credentials.getCredentials(currentEmailPassword).get("email");
+    userEntry.setEmail(userEntry.getEmail().trim());
+
+    if (!currentEmail.equalsIgnoreCase(userEntry.getEmail())) {
       if (this.repository.findByEmail(userEntry.getEmail()).isPresent()) {
         throw new UserAlreadyRegisteredException();
       }

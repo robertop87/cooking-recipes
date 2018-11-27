@@ -56,7 +56,7 @@ public class RecipeController {
   @GetMapping("/recipes/search")
   @ResponseBody
   public Set<RecipeEntry> searchRecipes(@RequestParam("keyWord") @NotBlank String keyWord) {
-    return this.recipeService.searchByWord(keyWord);
+    return this.recipeService.searchByWord(keyWord.trim());
   }
 
   @PutMapping("/recipes/personal")
@@ -74,6 +74,6 @@ public class RecipeController {
       @RequestHeader("email-pwd") @NotBlank String emailPassword,
       @RequestParam("recipeNameToDelete") @NotBlank String recipeNameToDelete)
       throws UserNotFoundException, RecipeNotFoundException {
-    this.recipeService.deleteByName(emailPassword, recipeNameToDelete);
+    this.recipeService.deleteByName(emailPassword, recipeNameToDelete.trim());
   }
 }

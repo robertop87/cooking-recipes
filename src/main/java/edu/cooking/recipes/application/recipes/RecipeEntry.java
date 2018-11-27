@@ -26,8 +26,8 @@ public class RecipeEntry {
    */
   public static Recipe mapTo(RecipeEntry recipeEntry) {
     return Recipe.builder()
-        .name(recipeEntry.name)
-        .content(recipeEntry.content)
+        .name(recipeEntry.name.trim())
+        .content(recipeEntry.content.trim())
         .build();
   }
 

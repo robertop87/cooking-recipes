@@ -52,7 +52,7 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public Set<RecipeEntry> searchByWord(String searchWord) {
-    return this.mapToSet(this.recipeRepository.searchWordInRecipe(searchWord.toUpperCase()));
+    return this.mapToSet(this.recipeRepository.searchWordInRecipe(searchWord.toUpperCase().trim()));
   }
 
   @Override
@@ -66,8 +66,8 @@ public class RecipeServiceImpl implements RecipeService {
 
     Recipe recipeToUpdate = results.stream().findFirst().orElseThrow(RecipeNotFoundException::new);
 
-    recipeToUpdate.setName(recipeToModify.getRecipeEntry().getName());
-    recipeToUpdate.setContent(recipeToModify.getRecipeEntry().getContent());
+    recipeToUpdate.setName(recipeToModify.getRecipeEntry().getName().trim());
+    recipeToUpdate.setContent(recipeToModify.getRecipeEntry().getContent().trim());
 
     this.recipeRepository.save(recipeToUpdate);
   }
@@ -76,7 +76,7 @@ public class RecipeServiceImpl implements RecipeService {
   public void deleteByName(String emailPassword, String recipeName)
       throws UserNotFoundException, RecipeNotFoundException {
     val owner = this.userService.getPersonalData(emailPassword);
-    Recipe recipeToDelete = this.recipeRepository.getRecipeByNameAndUserEmail(recipeName, owner.getEmail())
+    Recipe recipeToDelete = this.recipeRepository.getRecipeByNameAndUserEmail(recipeName.trim(), owner.getEmail())
         .stream().findFirst().orElseThrow(RecipeNotFoundException::new);
 
     this.recipeRepository.deleteRecipeById(recipeToDelete.getId());
