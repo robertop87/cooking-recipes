@@ -127,7 +127,7 @@ Example request:
 GET http://localhost:8080/users/personal
 Accept: */*
 Cache-Control: no-cache
-email-pwd: perez@gmail.com:myPassword   <-- Note this, a custome header as credential
+email-pwd: perez@gmail.com:myPassword   <-- Note this, a custom header as credential
 ```
 Expected Response:
 ```
@@ -393,3 +393,4 @@ Date: Tue, 27 Nov 2018 13:38:33 GMT
 ## Known missing implementation
 
 - Find Recipes is not serving paginated results. This should be fixed as next step.
+- In this first version, for edit/update user or recipe data is mandatory to send all the fields, this could be improved updating only the new data, instead to force users to send the whole data.
