@@ -5,6 +5,8 @@ import edu.cooking.recipes.application.users.exceptions.UserAlreadyRegisteredExc
 import edu.cooking.recipes.application.users.exceptions.UserNotFoundException;
 import edu.cooking.recipes.domain.User;
 import java.util.Set;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
@@ -12,6 +14,8 @@ public interface UserService {
       throws BadDateFormatException, UserAlreadyRegisteredException;
 
   Set<UserGet> getAllUsers();
+
+  Page<UserGet> getAllUsersByPage(Pageable pageable);
 
   UserGet getById(long userId) throws UserNotFoundException;
 

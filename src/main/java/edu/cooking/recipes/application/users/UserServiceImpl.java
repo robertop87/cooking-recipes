@@ -14,6 +14,8 @@ import java.util.stream.StreamSupport;
 import lombok.extern.java.Log;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Log
@@ -49,6 +51,12 @@ public class UserServiceImpl implements UserService {
         .stream(this.repository.findAll().spliterator(), false)
         .map(UserGet::mapFrom)
         .collect(Collectors.toSet());
+  }
+
+  @Override
+  public Page<UserGet> getAllUsersByPage(Pageable pageable) {
+    Page<User> userPage = this.repository.findAll(pageable);
+    return userPage.map(UserGet::mapFrom);
   }
 
   @Override

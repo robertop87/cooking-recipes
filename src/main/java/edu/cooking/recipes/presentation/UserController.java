@@ -12,6 +12,8 @@ import java.util.Set;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,8 +44,8 @@ public class UserController {
 
   @GetMapping("/users")
   @ResponseBody
-  public Set<UserGet> getAllUsers() {
-    return this.service.getAllUsers();
+  public Page<UserGet> getAllUsers(Pageable pageable) {
+    return this.service.getAllUsersByPage(pageable);
   }
 
   @GetMapping("/users/{id}")
